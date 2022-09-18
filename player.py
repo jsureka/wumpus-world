@@ -2,18 +2,18 @@ import time
 import pygame
 import constants as con
 import tiles
-
+import preview_tiles
 
 class Player:
     def __init__(self):
         self.clock = pygame.time.Clock()
         self.tiles = tiles.Tiles()
+        self.preview_tiles = preview_tiles.Preview_Tiles()
         self.player_image = pygame.image.load(con.PLAYER_DOWN)
         self.position = [0, 0]
         self.track = [[[0, 0], 'root']]
         self.Undel_track = [[[0, 0], 'root']]
         self.score = 0
-
         self.map = tiles.array_construct('u')
         self.pit_prob = tiles.array_construct(0)
         self.wumpus_prob = tiles.array_construct(0)

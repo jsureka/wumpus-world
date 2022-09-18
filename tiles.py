@@ -47,7 +47,7 @@ class Tiles:
             self.obstacle[x][y] = cls
 
     def text_view(self, surface):
-        font = pygame.font.SysFont('timesnewroman', 10)
+        font = pygame.font.SysFont('arial', 10)
         breeze = font.render("BREEZE", False, con.BLACK, con.WHITE)
         stench = font.render("STENCH", False, con.BLACK, con.WHITE)
         lit = font.render("LIT", False, con.BLACK, con.WHITE)

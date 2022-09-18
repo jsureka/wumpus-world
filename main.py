@@ -13,6 +13,7 @@ class Game:
         self.running = True
         self.player = player.Player()
         self.tiles = self.player.tiles
+        self.preview_tiles = self.player.preview_tiles
         self.start = False
 
         self.tickValue = 30
@@ -20,7 +21,7 @@ class Game:
         self.window.set_caption(con.CAPTION)
         self.window.set_icon(pygame.image.load(con.WUMPUS_ICON))
 
-        self.surface = self.window.set_mode((self.tiles.width + 200, self.tiles.height))
+        self.surface = self.window.set_mode((self.tiles.width +500, self.tiles.height))
         self.print_obstacle()
 
     def event(self):
@@ -40,9 +41,10 @@ class Game:
     def run(self):
         while self.running:
             self.event()
-            self.surface.fill(con.LIGHTGREY)
+            self.surface.fill(con.WHITE)
             self.tiles.background(self.surface)
             self.tiles.text_view(self.surface)
+          #  self.preview_tiles.background(self.surface)
 
             #self.clock.tick(2)
             prespecifiedbutton = button.Button(690, 250, 'Prespecified', self.surface)
@@ -73,7 +75,7 @@ class Game:
         self.window.update()
 
     def prespecified(self):
-        text_file = open("test.txt", "r")
+        text_file = open("input.txt", "r")
         temp = []
         while True:
             line = text_file.readline()
