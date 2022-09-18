@@ -20,7 +20,7 @@ WINNING_LENGTH = 4
 
 pygame.init()
 # font for button
-font = pygame.font.SysFont('Constantia', 14)
+font = pygame.font.SysFont('Helvetica', 14,bold=True)
 
 # define global variable
 clicked = False
@@ -28,12 +28,12 @@ clicked = False
 
 class Button:
     # colours for button and text
-    button_col = (255, 0, 0)
+    button_col = (93, 190, 163)
     hover_col = (75, 225, 255)
     click_col = (50, 150, 255)
-    text_col = BLACK
-    width = 80
-    height = 40
+    text_col = WHITE
+    width = 90
+    height = 50
 
     def __init__(self, x, y, text, screen):
         self.x = x

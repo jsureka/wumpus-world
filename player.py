@@ -20,9 +20,9 @@ class Player:
         self.sensor_op(self.position[0], self.position[1])
 
     def draw_player(self, surface):
-        font = pygame.font.SysFont('timesnewroman', 30)
+        font = pygame.font.SysFont('Helvetica', 30)
         Score = font.render("Score :" + str(self.score), False, con.BLACK, con.WHITE)
-        surface.blit(Score, (self.tiles.width + 30, 50))
+        surface.blit(Score, (self.tiles.width + 200, 330))
         surface.blit(self.player_image, (self.position[1] * con.TILE_SIZE, self.position[0] * con.TILE_SIZE))
 
     def tile_state_change(self):
@@ -36,7 +36,7 @@ class Player:
         if 'l' in self.map[x][y]:
 
             if self.tiles.get_gold(x, y):
-                self.score += 10
+                self.score += 100
 
         if self.tiles.obstacle[x][y] == 'p':
             print("...........YOU ARE DEAD...........\n...........FELL INTO PIT............")

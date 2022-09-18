@@ -10,19 +10,21 @@ GOLD = './res/gold.png'
 PIT = './res/pit.png'
 
 PREVIEW_WUMPUS_ICON = './res/wumpus.png'
-PREVIEW_WUMPUS = './res/wumpus_ico.png'
-PREVIEW_GOLD = './res/gold.png'
-PREVIEW_PIT = './res/pit.png'
+PREVIEW_WUMPUS = './res/rsz_wumpus_ico.png'
+PREVIEW_GOLD = './res/rsz_gold.png'
+PREVIEW_PIT = './res/rsz_pit.png'
 
 PLAYER_DOWN = './res/player_facing_to_down.png'
 PLAYER_UP = './res/player_facing_to_up.png'
 PLAYER_LEFT = './res/player_facing_to_left.png'
 PLAYER_RIGHT = './res/player_facing_to_right.png'
 
-VISIBLE_FLOOR = './res/tiles.png'
+VISIBLE_FLOOR = './res/floor.png'
 HIDDEN_FLOOR = './res/paving.png'
 
-PREVIEW_VISIBLE_FLOOR = './res/tiles.png'
+PREVIEW_VISIBLE_FLOOR = './res/rsz_floor.png'
+PREVIEW_GOLD_FLOOR = './res/rsz_floor_gold.png'
+
 HIDDEN_FLOOR = './res/paving.png'
 # -----------------------------
 CAPTION = "Wumpus World"

@@ -1,3 +1,4 @@
+from importlib.util import set_loader
 import pygame
 import constants as con
 import random as rand
@@ -131,6 +132,9 @@ class Tiles:
         for i in range(con.COL_COUNT):
             pygame.draw.line(surface, con.WHITE, (i * con.TILE_SIZE, 0), (i * con.TILE_SIZE, self.height))
         pygame.draw.line(surface, con.WHITE, (self.width - 1, 0), (self.width - 1, self.height))
+
+    def get_obstacles(self):
+        return self.obstacle
 
     def get_gold(self, x, y):
         if self.obstacle[x][y] == 'g':

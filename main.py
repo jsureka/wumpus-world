@@ -44,11 +44,13 @@ class Game:
             self.surface.fill(con.WHITE)
             self.tiles.background(self.surface)
             self.tiles.text_view(self.surface)
-          #  self.preview_tiles.background(self.surface)
+            self.preview_tiles.background(self.surface)
 
             #self.clock.tick(2)
-            prespecifiedbutton = button.Button(690, 250, 'Prespecified', self.surface)
-            randombutton = button.Button(690, 300, 'Random', self.surface)
+            prespecifiedbutton = button.Button(690, 400, 'Prespecified', self.surface)
+            randombutton = button.Button(690, 480, 'Random', self.surface)
+            exitButton = button.Button(690, 560, 'Exit', self.surface)
+
             if prespecifiedbutton.draw_button():
                 self.tickValue = 1
                 self.start = True
@@ -57,6 +59,9 @@ class Game:
             if randombutton.draw_button():
                 self.tickValue = 1
                 self.start = True
+            
+            if exitButton.draw_button():
+                self.running = False
 
             self.player.draw_player(self.surface)
 
@@ -90,6 +95,8 @@ class Game:
         for i in range(10):
             for j in range(10):
                 self.tiles.obstacle[i][j] = temp[i][j]
+                self.preview_tiles.obstacle[i][j] = temp[i][j]
+
 
 
 if __name__ == "__main__":
