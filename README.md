@@ -1,1 +1,1 @@
-# Artificial Intelligenxe - Project 2
+# Artificial Intelligence - Project 2
