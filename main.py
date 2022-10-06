@@ -66,7 +66,7 @@ class Game:
             self.player.draw_player(self.surface)
 
             if self.start:
-                self.player.think_bro_think()
+                self.player.think()
 
             self.update_window()
 

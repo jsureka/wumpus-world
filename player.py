@@ -4,6 +4,7 @@ import constants as con
 import tiles
 import preview_tiles
 
+
 class Player:
     def __init__(self):
         self.clock = pygame.time.Clock()
@@ -21,9 +22,11 @@ class Player:
 
     def draw_player(self, surface):
         font = pygame.font.SysFont('Helvetica', 30)
-        Score = font.render("Score :" + str(self.score), False, con.BLACK, con.WHITE)
+        Score = font.render("Score :" + str(self.score),
+                            False, con.BLACK, con.WHITE)
         surface.blit(Score, (self.tiles.width + 200, 330))
-        surface.blit(self.player_image, (self.position[1] * con.TILE_SIZE, self.position[0] * con.TILE_SIZE))
+        surface.blit(
+            self.player_image, (self.position[1] * con.TILE_SIZE, self.position[0] * con.TILE_SIZE))
 
     def tile_state_change(self):
         x = self.position[0]
@@ -39,9 +42,11 @@ class Player:
                 self.score += 100
 
         if self.tiles.obstacle[x][y] == 'p':
-            print("...........YOU ARE DEAD...........\n...........FELL INTO PIT............")
+            print(
+                "...........YOU ARE DEAD...........\n...........FELL INTO PIT............")
         elif self.tiles.obstacle[x][y] == 'w':
-            print("............YOU ARE DEAD...........\n............EATEN BY WUMPUS............")
+            print(
+                "............YOU ARE DEAD...........\n............EATEN BY WUMPUS............")
 
     def on_right_key_pressed(self):
         self.player_image = pygame.image.load(con.PLAYER_RIGHT)
@@ -79,7 +84,7 @@ class Player:
             if char not in self.map[x][y]:
                 self.map[x][y].append(char)
 
-    def think_bro_think(self):
+    def think(self):
         valid_path = self.get_valid_path()
         unvisited_path = self.get_unvisited(valid_path)
         flag = False
@@ -112,6 +117,9 @@ class Player:
         if self.position == [0, 0] and 'v' in self.map[0][1] and 'v' in self.map[1][0]:
             paths = self.get_Path()
             choosen_path = paths[0]
+            print(choosen_path)
+            # print(paths)
+            # takeRisk(choosen_path)  # Take the risk to go to path
 
         if not flag:
             if self.track[len(self.track) - 1][1] == 'up':
@@ -126,6 +134,9 @@ class Player:
             elif self.track[len(self.track) - 1][1] == 'left':
                 del self.track[len(self.track) - 1]
                 self.on_right_key_pressed()
+
+    def takeRisk(self):
+        print("Taking Risk")
 
     def get_valid_path(self):
         temp = []
@@ -156,6 +167,9 @@ class Player:
             self.Set_value(x, y, self.wumpus_prob, -10)
             self.Set_value(x, y, self.pit_prob, -10)
 
+    def kill_wumpus(self, x, y):
+        self.map[x][y] = "u"
+
     def Set_value(self, x, y, prob, value):
         if x + 1 < 10 and 'v' not in self.map[x + 1][y]:
             prob[x + 1][y] += value
@@ -178,10 +192,10 @@ class Player:
                     self.map[x - 1][y]:
                 flag = True
             if y + 1 < 10 and 'v' in self.map[x][y + 1] and 's' not in self.map[x][y + 1] and 'b' not in self.map[x][
-                y + 1]:
+                    y + 1]:
                 flag = True
             if y - 1 >= 0 and 'v' in self.map[x][y - 1] and 's' not in self.map[x][y - 1] and 'b' not in self.map[x][
-                y - 1]:
+                    y - 1]:
                 flag = True
 
         else:
