@@ -89,7 +89,6 @@ class Game:
                 break
             else:
                 tempLine = line.split(' ')
-                # print('hi',tempLine)
                 temp.append(tempLine)
         # print(temp)
         for i in range(10):
