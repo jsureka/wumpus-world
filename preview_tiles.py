@@ -1,11 +1,10 @@
 import pygame
 import constants as con
 import random as rand
-import tiles
 
 
 class Preview_Tiles:
-    def __init__(self):
+    def __init__(self, tiles):
         self.height = con.PREVIEW_TILE_SIZE * con.ROW_COUNT
         self.width = con.PREVIEW_TILE_SIZE * con.COL_COUNT
 
@@ -16,7 +15,7 @@ class Preview_Tiles:
         self.floor_gold = pygame.image.load(con.PREVIEW_GOLD_FLOOR)
 
         self.flag = False
-        self.obstacle = tiles.Tiles().obstacle
+        self.obstacle = tiles.obstacle
 
     # def set_obstacle(self):
 

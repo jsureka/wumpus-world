@@ -9,7 +9,7 @@ class Player:
     def __init__(self):
         self.clock = pygame.time.Clock()
         self.tiles = tiles.Tiles()
-        self.preview_tiles = preview_tiles.Preview_Tiles()
+        self.preview_tiles = preview_tiles.Preview_Tiles(self.tiles)
         self.player_image = pygame.image.load(con.PLAYER_DOWN)
         self.position = [0, 0]
         self.track = [[[0, 0], 'root']]
