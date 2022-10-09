@@ -1,4 +1,8 @@
+from importlib.util import set_loader
+from collections import deque as queue
 import time
+from tkinter import TRUE
+from turtle import position
 import pygame
 import constants as con
 import tiles
@@ -13,13 +17,14 @@ class Player:
         self.player_image = pygame.image.load(con.PLAYER_DOWN)
         self.position = [0, 0]
         self.track = [[[0, 0], 'root']]
-        self.Undel_track = [[[0, 0], 'root']]
         self.score = 0
         self.map = tiles.array_construct('u')
         self.pit_prob = tiles.array_construct(0)
         self.wumpus_prob = tiles.array_construct(0)
         self.sensor_op(self.position[0], self.position[1])
-
+        self.chosen_path = [0,0]
+        self.check = 0
+        self.vis =  [[ False for i in range(10)] for i in range(10)]
     def draw_player(self, surface):
         font = pygame.font.SysFont('Helvetica', 30)
         Score = font.render("Score :" + str(self.score),
@@ -85,42 +90,18 @@ class Player:
                 self.map[x][y].append(char)
 
     def think(self):
-        valid_path = self.get_valid_path()
-        unvisited_path = self.get_unvisited(valid_path)
-        flag = False
-        for i in range(len(unvisited_path)):
-            if self.isSafe(unvisited_path[i][0], unvisited_path[i][1]):
-                flag = True
-                if unvisited_path[i][2] == 'up':
-                    self.track.append([unvisited_path[i], 'up'])
-                    self.Undel_track.append([unvisited_path[i], 'up'])
+        flag = self.move_player()
 
-                    self.on_up_key_pressed()
-                elif unvisited_path[i][2] == 'left':
-                    self.track.append([unvisited_path[i], 'left'])
-                    self.Undel_track.append([unvisited_path[i], 'left'])
-
-                    self.on_left_key_pressed()
-                elif unvisited_path[i][2] == 'right':
-                    self.track.append([unvisited_path[i], 'right'])
-                    self.Undel_track.append([unvisited_path[i], 'right'])
-
-                    self.on_right_key_pressed()
-                elif unvisited_path[i][2] == 'down':
-                    self.track.append([unvisited_path[i], 'down'])
-                    self.Undel_track.append([unvisited_path[i], 'down'])
-
-                    self.on_down_key_pressed()
-
-            if flag:
-                break
-        if self.position == [0, 0] and 'v' in self.map[0][1] and 'v' in self.map[1][0]:
+        if self.position == [0,0] and 'v' in self.map[0][1] and 'v' in self.map[1][0]:
             paths = self.get_Path()
-            choosen_path = paths[0]
-            print(choosen_path)
-            # print(paths)
-            # takeRisk(choosen_path)  # Take the risk to go to path
+            self.position = paths[0][1]
+            self.chosen_path = paths[0][1]
+            self.tile_state_change()
+            flag = self.move_player()
 
+        self.return_player(flag)
+
+    def return_player(self, flag):
         if not flag:
             if self.track[len(self.track) - 1][1] == 'up':
                 del self.track[len(self.track) - 1]
@@ -134,6 +115,35 @@ class Player:
             elif self.track[len(self.track) - 1][1] == 'left':
                 del self.track[len(self.track) - 1]
                 self.on_right_key_pressed()
+            else:
+                self.position = [0,0]
+
+    def move_player(self):
+        valid_path = self.get_valid_path()
+        unvisited_path = self.get_unvisited(valid_path)
+        flag = False
+        for i in range(len(unvisited_path)):
+            if self.isSafe(unvisited_path[i][0], unvisited_path[i][1]):
+                flag = True
+                if unvisited_path[i][2] == 'up':
+                    self.track.append([unvisited_path[i], 'up'])
+                    self.on_up_key_pressed()
+
+                elif unvisited_path[i][2] == 'left':
+                    self.track.append([unvisited_path[i], 'left'])
+                    self.on_left_key_pressed()
+
+                elif unvisited_path[i][2] == 'right':
+                    self.track.append([unvisited_path[i], 'right'])
+                    self.on_right_key_pressed()
+
+                elif unvisited_path[i][2] == 'down':
+                    self.track.append([unvisited_path[i], 'down'])
+                    self.on_down_key_pressed()
+
+            if flag:
+                break
+        return flag
 
     def takeRisk(self):
         print("Taking Risk")
@@ -185,17 +195,13 @@ class Player:
         b = self.position[1]
         flag = False
         if 's' in self.map[a][b] or 'b' in self.map[a][b]:
-            if x + 1 < 10 and 'v' in self.map[x + 1][y] and 's' not in self.map[x + 1][y] and 'b' not in \
-                    self.map[x + 1][y]:
+            if x + 1 < 10 and 'v' in self.map[x + 1][y] and 's' not in self.map[x + 1][y] and 'b' not in  self.map[x + 1][y]:
                 flag = True
-            if x - 1 >= 0 and 'v' in self.map[x - 1][y] and 's' not in self.map[x - 1][y] and 'b' not in \
-                    self.map[x - 1][y]:
+            if x - 1 >= 0 and 'v' in self.map[x - 1][y] and 's' not in self.map[x - 1][y] and 'b' not in self.map[x - 1][y]:
                 flag = True
-            if y + 1 < 10 and 'v' in self.map[x][y + 1] and 's' not in self.map[x][y + 1] and 'b' not in self.map[x][
-                    y + 1]:
+            if y + 1 < 10 and 'v' in self.map[x][y + 1] and 's' not in self.map[x][y + 1] and 'b' not in self.map[x][y + 1]:
                 flag = True
-            if y - 1 >= 0 and 'v' in self.map[x][y - 1] and 's' not in self.map[x][y - 1] and 'b' not in self.map[x][
-                    y - 1]:
+            if y - 1 >= 0 and 'v' in self.map[x][y - 1] and 's' not in self.map[x][y - 1] and 'b' not in self.map[x][ y - 1]:
                 flag = True
 
         else:
@@ -212,6 +218,15 @@ class Player:
                 temp.append(valid_path[i])
         return temp
 
+    def get_visited(self, valid_path):
+        temp = []
+        for i in range(len(valid_path)):
+            x = valid_path[i][0]
+            y = valid_path[i][1]
+
+            if 'v' in self.map[x][y]:
+                temp.append(valid_path[i])
+        return temp    
     def get_Path(self):
         temp = []
         if len(self.pit_prob) == 0 or len(self.wumpus_prob) == 0:
@@ -226,3 +241,5 @@ class Player:
                     temp.append([self.wumpus_prob[i][j], [i, j], 'w'])
         temp.sort()
         return temp
+
+    

@@ -67,7 +67,6 @@ class Game:
 
             if self.start:
                 self.player.think()
-
             self.update_window()
 
     def print_obstacle(self):
