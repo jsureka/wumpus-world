@@ -1,3 +1,4 @@
+from audioop import reverse
 from importlib.util import set_loader
 from collections import deque as queue
 import time
@@ -22,9 +23,12 @@ class Player:
         self.pit_prob = tiles.array_construct(0)
         self.wumpus_prob = tiles.array_construct(0)
         self.sensor_op(self.position[0], self.position[1])
-        self.chosen_path = [0,0]
+        self.chosen_path = [0, 0]
         self.check = 0
-        self.vis =  [[ False for i in range(10)] for i in range(10)]
+        self.vis = [[False for i in range(10)] for i in range(10)]
+        self.wumpus_killed = False
+        self.alive = True
+
     def draw_player(self, surface):
         font = pygame.font.SysFont('Helvetica', 30)
         Score = font.render("Score :" + str(self.score),
@@ -47,9 +51,11 @@ class Player:
                 self.score += 100
 
         if self.tiles.obstacle[x][y] == 'p':
+            self.alive = False
             print(
                 "...........YOU ARE DEAD...........\n...........FELL INTO PIT............")
         elif self.tiles.obstacle[x][y] == 'w':
+            self.alive = False
             print(
                 "............YOU ARE DEAD...........\n............EATEN BY WUMPUS............")
 
@@ -91,15 +97,34 @@ class Player:
 
     def think(self):
         flag = self.move_player()
+        if self.position == [0, 0] and 'v' in self.map[0][1] and 'v' in self.map[1][0]:
 
-        if self.position == [0,0] and 'v' in self.map[0][1] and 'v' in self.map[1][0]:
             paths = self.get_Path()
-            self.position = paths[0][1]
-            self.chosen_path = paths[0][1]
+            # paths.sort(reverse=True)
+            w_path = self.wumpus_prob_paths(paths)
+
+            if not self.wumpus_killed:
+                tempPos = w_path[0][1]
+                self.kill_wumpus(w_path)
+                self.wumpus_killed = True
+            else:
+                tempPos = paths[0][1]
+
+            self.position = tempPos
+            self.chosen_path = tempPos
             self.tile_state_change()
             flag = self.move_player()
 
         self.return_player(flag)
+
+    def wumpus_prob_paths(self, paths):
+        # print(paths)
+        paths.sort(reverse=True)
+        w_path = []
+        for p in paths:
+            if p[2] == 'w':
+                w_path.append(p)
+        return w_path
 
     def return_player(self, flag):
         if not flag:
@@ -116,7 +141,7 @@ class Player:
                 del self.track[len(self.track) - 1]
                 self.on_right_key_pressed()
             else:
-                self.position = [0,0]
+                self.position = [0, 0]
 
     def move_player(self):
         valid_path = self.get_valid_path()
@@ -144,9 +169,6 @@ class Player:
             if flag:
                 break
         return flag
-
-    def takeRisk(self):
-        print("Taking Risk")
 
     def get_valid_path(self):
         temp = []
@@ -177,8 +199,14 @@ class Player:
             self.Set_value(x, y, self.wumpus_prob, -10)
             self.Set_value(x, y, self.pit_prob, -10)
 
-    def kill_wumpus(self, x, y):
-        self.map[x][y] = "u"
+    def kill_wumpus(self, w_path):
+        x = w_path[0][1][0]
+        y = w_path[0][1][1]
+        self.tiles.obstacle[x][y] = "n"
+        self.map[x][y] = "v"
+        self.wumpus_prob.sort(reverse=True)
+        # del self.wumpus_prob[0]
+        # self.Set_value(x, y, self.wumpus_prob, 0)
 
     def Set_value(self, x, y, prob, value):
         if x + 1 < 10 and 'v' not in self.map[x + 1][y]:
@@ -195,13 +223,13 @@ class Player:
         b = self.position[1]
         flag = False
         if 's' in self.map[a][b] or 'b' in self.map[a][b]:
-            if x + 1 < 10 and 'v' in self.map[x + 1][y] and 's' not in self.map[x + 1][y] and 'b' not in  self.map[x + 1][y]:
+            if x + 1 < 10 and 'v' in self.map[x + 1][y] and 's' not in self.map[x + 1][y] and 'b' not in self.map[x + 1][y]:
                 flag = True
             if x - 1 >= 0 and 'v' in self.map[x - 1][y] and 's' not in self.map[x - 1][y] and 'b' not in self.map[x - 1][y]:
                 flag = True
             if y + 1 < 10 and 'v' in self.map[x][y + 1] and 's' not in self.map[x][y + 1] and 'b' not in self.map[x][y + 1]:
                 flag = True
-            if y - 1 >= 0 and 'v' in self.map[x][y - 1] and 's' not in self.map[x][y - 1] and 'b' not in self.map[x][ y - 1]:
+            if y - 1 >= 0 and 'v' in self.map[x][y - 1] and 's' not in self.map[x][y - 1] and 'b' not in self.map[x][y - 1]:
                 flag = True
 
         else:
@@ -226,7 +254,8 @@ class Player:
 
             if 'v' in self.map[x][y]:
                 temp.append(valid_path[i])
-        return temp    
+        return temp
+
     def get_Path(self):
         temp = []
         if len(self.pit_prob) == 0 or len(self.wumpus_prob) == 0:
@@ -241,5 +270,3 @@ class Player:
                     temp.append([self.wumpus_prob[i][j], [i, j], 'w'])
         temp.sort()
         return temp
-
-    

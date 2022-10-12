@@ -29,12 +29,11 @@ HIDDEN_FLOOR = './res/paving.png'
 # -----------------------------
 CAPTION = "Wumpus World"
 # -----------------------------
-WUMPUS_COUNT = 1
+WUMPUS_COUNT = 6
 PIT_COUNT = 10
-GOLD_COUNT = 10
+GOLD_COUNT = 6
 # -----------------------------
 ROW_COUNT = 10
 COL_COUNT = 10
 TILE_SIZE = 64
 PREVIEW_TILE_SIZE = 32
-
