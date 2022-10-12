@@ -52,12 +52,12 @@ class Game:
             exitButton = button.Button(690, 560, 'Exit', self.surface)
 
             if prespecifiedbutton.draw_button():
-                self.tickValue = 1
+                self.tickValue = 5
                 self.start = True
                 self.prespecified()
 
             if randombutton.draw_button():
-                self.tickValue = 1
+                self.tickValue = 5
                 self.start = True
             
             if exitButton.draw_button():

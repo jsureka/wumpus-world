@@ -1,6 +1,6 @@
 n n n n n n n n n n
-n n w n g n n n n w
-n p n n n n n n n n
+n n p n g n n n n w
+n n n n n n n n n n
 n n n n n n n n n n
 n n n n g n n p p n
 n n n n n n n n n n

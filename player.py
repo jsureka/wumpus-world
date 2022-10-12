@@ -8,7 +8,9 @@ import pygame
 import constants as con
 import tiles
 import preview_tiles
-
+import button
+import main
+import sys
 
 class Player:
     def __init__(self):
@@ -28,7 +30,12 @@ class Player:
         self.vis = [[False for i in range(10)] for i in range(10)]
         self.wumpus_killed = False
         self.alive = True
+        self.running = True
+        self.window = pygame.display
+        self.window.set_caption(con.CAPTION)
+        self.window.set_icon(pygame.image.load(con.WUMPUS_ICON))
 
+        self.surface = self.window.set_mode((400,300))
     def draw_player(self, surface):
         font = pygame.font.SysFont('Helvetica', 30)
         Score = font.render("Score :" + str(self.score),
@@ -52,12 +59,25 @@ class Player:
 
         if self.tiles.obstacle[x][y] == 'p':
             self.alive = False
-            print(
-                "...........YOU ARE DEAD...........\n...........FELL INTO PIT............")
+            while(self.running):
+                self.surface.fill(con.WHITE)
+                exitButton = button.Button(300, 300, 'Exit', self.surface)
+                font = pygame.font.SysFont('Helvetica', 30)
+                Score = font.render("Game over. You fell into a pit" ,False, con.BLACK, con.WHITE)
+                self.surface.blit(Score, ( 420, 310))
+                if exitButton.draw_button():
+                    break
+                self.window.update()           
+            pygame.quit()
+            sys.exit() 
+           
         elif self.tiles.obstacle[x][y] == 'w':
             self.alive = False
             print(
                 "............YOU ARE DEAD...........\n............EATEN BY WUMPUS............")
+            pygame.quit()
+            sys.exit()  
+
 
     def on_right_key_pressed(self):
         self.player_image = pygame.image.load(con.PLAYER_RIGHT)
@@ -98,23 +118,21 @@ class Player:
     def think(self):
         flag = self.move_player()
         if self.position == [0, 0] and 'v' in self.map[0][1] and 'v' in self.map[1][0]:
-
             paths = self.get_Path()
-            # paths.sort(reverse=True)
             w_path = self.wumpus_prob_paths(paths)
 
-            if not self.wumpus_killed:
-                tempPos = w_path[0][1]
+            if not self.wumpus_killed and w_path:                  
                 self.kill_wumpus(w_path)
                 self.wumpus_killed = True
+                tempPos = w_path[0][1]
             else:
                 tempPos = paths[0][1]
-
             self.position = tempPos
             self.chosen_path = tempPos
             self.tile_state_change()
             flag = self.move_player()
-
+            if self.score == 500:
+                sys.exit
         self.return_player(flag)
 
     def wumpus_prob_paths(self, paths):
@@ -141,7 +159,11 @@ class Player:
                 del self.track[len(self.track) - 1]
                 self.on_right_key_pressed()
             else:
-                self.position = [0, 0]
+                paths = self.get_Path()
+                self.position = paths[0][1]
+                self.chosen_path = paths[0][1]
+                self.tile_state_change()
+                flag = self.move_player()
 
     def move_player(self):
         valid_path = self.get_valid_path()
@@ -200,11 +222,12 @@ class Player:
             self.Set_value(x, y, self.pit_prob, -10)
 
     def kill_wumpus(self, w_path):
-        x = w_path[0][1][0]
-        y = w_path[0][1][1]
-        self.tiles.obstacle[x][y] = "n"
-        self.map[x][y] = "v"
-        self.wumpus_prob.sort(reverse=True)
+        if w_path:
+            x = w_path[0][1][0]
+            y = w_path[0][1][1]
+            self.tiles.obstacle[x][y] = "n"
+            self.map[x][y] = "v"
+        # self.wumpus_prob.sort(reverse=True)
         # del self.wumpus_prob[0]
         # self.Set_value(x, y, self.wumpus_prob, 0)
 

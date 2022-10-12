@@ -28,9 +28,9 @@ clicked = False
 
 class Button:
     # colours for button and text
-    button_col = (93, 190, 163)
-    hover_col = (75, 225, 255)
-    click_col = (50, 150, 255)
+    button_col = (54, 54, 54)
+    hover_col = (99, 99, 99)
+    click_col = (54, 54, 54)
     text_col = WHITE
     width = 90
     height = 50

@@ -4,20 +4,19 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 LIGHTGREY = (200, 200, 200)
 # ------------------------
-WUMPUS_ICON = './res/wumpus.png'
-WUMPUS = './res/wumpus_ico.png'
+WUMPUS_ICON = './res/monster.png'
+WUMPUS = './res/monster.png'
 GOLD = './res/gold.png'
 PIT = './res/pit.png'
 
-PREVIEW_WUMPUS_ICON = './res/wumpus.png'
-PREVIEW_WUMPUS = './res/rsz_wumpus_ico.png'
+PREVIEW_WUMPUS = './res/monster32.png'
 PREVIEW_GOLD = './res/rsz_gold.png'
 PREVIEW_PIT = './res/rsz_pit.png'
 
-PLAYER_DOWN = './res/player_facing_to_down.png'
-PLAYER_UP = './res/player_facing_to_up.png'
-PLAYER_LEFT = './res/player_facing_to_left.png'
-PLAYER_RIGHT = './res/player_facing_to_right.png'
+PLAYER_DOWN = './res/man.png'
+PLAYER_UP = './res/man.png'
+PLAYER_LEFT = './res/man.png'
+PLAYER_RIGHT = './res/man.png'
 
 VISIBLE_FLOOR = './res/floor.png'
 HIDDEN_FLOOR = './res/paving.png'
@@ -29,9 +28,9 @@ HIDDEN_FLOOR = './res/paving.png'
 # -----------------------------
 CAPTION = "Wumpus World"
 # -----------------------------
-WUMPUS_COUNT = 6
-PIT_COUNT = 10
-GOLD_COUNT = 6
+WUMPUS_COUNT = 2
+PIT_COUNT = 4
+GOLD_COUNT = 5
 # -----------------------------
 ROW_COUNT = 10
 COL_COUNT = 10

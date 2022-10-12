@@ -48,7 +48,8 @@ class Tiles:
             else:
                 x = rand.randint(1, 9)
             y = rand.randint(1, 9)
-            self.obstacle[x][y] = cls
+            if self.obstacle[x][y] == 'n':
+                self.obstacle[x][y] = cls
 
     def text_view(self, surface):
         font = pygame.font.SysFont('arial', 10)
