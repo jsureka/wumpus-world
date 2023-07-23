@@ -1,6 +1,6 @@
 # Wumpus World Python Game
 
-![Wumpus World](wumpus_world.png)
+![Wumpus World](monster.png)
 
 Welcome to the Wumpus World Python Game repository! This project is a text-based implementation of the classic Wumpus World game, which was developed as the second project for the AI course.
 
